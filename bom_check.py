@@ -15,8 +15,8 @@ def get_title(title_re,title_list):
 
 #SW零件表與ERP-BOM比對函式(主函式)
 
-def bom_check(folder,sw_file,erp_file,out="out"):
-
+def bom_check(folder,sw_file,erp_file,part_path="",out="out"):
+    print(part_path)
     sw_path = f"{folder}\\{sw_file}.xlsx"
     df_sw1 = pd.read_excel(sw_path,sheet_name='工作表1',header=0)
 
@@ -28,13 +28,16 @@ def bom_check(folder,sw_file,erp_file,out="out"):
 
     #排除市購件
 
-    part_path = r"C:\Users\Devil\Desktop\python說明資料\BOM建立\測試用\part.csv"
+    
     if os.path.isfile(part_path):
+        print('有找到')
         df_part = pd.read_csv(part_path,header=None)
         df_part['使用'] = True
         df_part.columns = ['零件編號','使用']
         df_sw_part = pd.merge(df_sw1,df_part,how='outer')
         df_sw1 = df_sw_part[df_sw_part['使用'].isnull()].reset_index(drop=True)
+    else:
+        print(f'{part_path}\\part.csv 未找到市構件參考檔')
 
 
 

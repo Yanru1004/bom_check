@@ -6,6 +6,7 @@ import re,os
 #選擇資料夾
 def select_filepath(*arg):
     folder = askdirectory()
+    
     filepath.set(folder)
 
     li_list.delete(0,tk.END)
@@ -29,7 +30,8 @@ def find_list(folder):
 def start_check():
     li = li_list.get(0,tk.END)
     folder = filepath.get()
-
+    part_path = f'{os.getcwd()}\\part.csv'
+    print(part_path)
     li_out.delete(0,tk.END)
     
     if len(li)==0:
@@ -38,13 +40,14 @@ def start_check():
         li_out.insert(tk.END,'-----檢查開始-----')
     
     for f in li:
+        
         try:
             if os.path.exists(f'{folder}\\{f}_ERP.xlsx') == True:
-                bc.bom_check(folder,f'{f}_SW',f'{f}_ERP',f'{f}_check')
+                bc.bom_check(folder,f'{f}_SW',f'{f}_ERP',part_path,f'{f}_check')
                 li_out.insert(tk.END,(f'{f} BOM表 比對完成'))
                 li_out.insert(tk.END,(f'    -->{f}_check.xlsx\n'))
             elif os.path.exists(f'{folder}\\{f}_SW.xlsx') == True:
-                bc.bom_check(folder,f'{f}_SW',None,f'{f}_part_name_check')
+                bc.bom_check(folder,f'{f}_SW',None,part_path,f'{f}_part_name_check')
                 li_out.insert(tk.END,(f'{f}  零件編號 檢查完成 '))
                 li_out.insert(tk.END,(f'    -->{f}_part_name_check.xlsx\n'))
             else:
